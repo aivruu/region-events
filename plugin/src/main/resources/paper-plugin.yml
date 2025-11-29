@@ -1,8 +1,9 @@
-name: RegionEvents
-main: io.github.aivruu.regionevents.RegionEventsPlugin
-loader: io.github.aivruu.regionevents.library.RegionEventsPluginLoader
-authors: [ "aivruu" ]
+name: "REvt-RegionEvents"
+main: io.github.aivruu.revt.REvtPlugin
+loader: io.github.aivruu.revt.library.PluginLibraryLoader
+authors: ["aivruu"]
 
+folia-supported: true
 api-version: "1.20"
 version: ${version}
 
@@ -11,4 +12,4 @@ dependencies:
     WorldGuard:
       load: BEFORE
       required: true
-      join-classpath: true
+#      join-classpath: true

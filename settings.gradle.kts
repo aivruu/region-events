@@ -2,8 +2,12 @@
 
 rootProject.name = "region-events"
 
+pluginManagement {
+  includeBuild("build-logic")
+}
+
 sequenceOf("api", "plugin").forEach {
-  val kerbalProject = ":${rootProject.name}-$it"
-  include(kerbalProject)
-  project(kerbalProject).projectDir = file(it)
+  val formattedName = ":${rootProject.name}-$it"
+  include(formattedName)
+  project(formattedName).projectDir = file(it)
 }

@@ -1,4 +1,5 @@
 plugins {
+  id("regionevents.java-conventions")
   alias(libs.plugins.blossom)
 }
 
@@ -10,20 +11,20 @@ tasks {
   }
 }
 
-sourceSets {
-  main {
-    blossom {
-      javaSources {
-        property("version", project.version.toString())
-      }
-    }
-  }
-}
-
 dependencies {
-  api(project(":region-events-api"))
+  api(project(":${rootProject.name}-api"))
 
   compileOnly(libs.paper)
   compileOnly(libs.configurate)
   compileOnly(libs.worldguard)
+}
+
+sourceSets {
+  main {
+    blossom {
+      javaSources {
+        property("configurate_version", libs.versions.configurate.get())
+      }
+    }
+  }
 }
