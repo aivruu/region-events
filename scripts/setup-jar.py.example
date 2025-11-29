@@ -1,0 +1,34 @@
+# Script to prepare the testing-environment by ensuring a clean-installation for the jar for plugin testing
+import os
+
+from pathlib import Path
+
+ServerDir = Path("Your-Testing-Environment")
+PluginsDir = ServerDir / "plugins"
+Name = "Plugin'-Name"
+FileName = f"{Name}.jar"
+CompiledJarsPath = Path("Jar-builds-Dir")
+
+def ensure_dir_not_exists():
+  target_dir = Path(Name)
+  if not target_dir.exists():
+    print("Plugin's folder doesn't exists, skipping removal.")
+    return
+
+  os.remove(target_dir)
+  print(f"Removed existing directory: {target_dir}")
+
+def remove_jar_if_exists():
+  target_jar = PluginsDir / FileName
+  if not target_jar.exists():
+    print("Jar doesn't exists, skipping removal.")
+    return
+
+  os.remove(target_jar)
+  print(f"Removed existing jar: {target_jar}")
+
+def setup():
+  ensure_dir_not_exists()
+  remove_jar_if_exists()
+
+  compiled = CompiledJarsPath / FileName
