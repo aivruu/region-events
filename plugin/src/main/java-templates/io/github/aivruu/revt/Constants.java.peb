@@ -1,0 +1,5 @@
+package io.github.aivruu.revt;
+
+public final class Constants {
+  public static final String CONFIGURATE_VERSION = "{{ configurate_version }}";
+}
