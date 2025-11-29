@@ -1,6 +1,6 @@
-// This file is part of regions, licensed under the GNU License.
+// This file is part of region-events, licensed under the GNU License.
 //
-// Copyright (c) 2024 aivruu
+// Copyright (c) 2024-2025 Alejandro
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,25 +14,27 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
-package io.github.aivruu.regionevents.config.object;
+package io.github.aivruu.revt.config.domain.mapped;
 
+import io.github.aivruu.revt.config.domain.ConfigurationContract;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 import java.util.concurrent.TimeUnit;
 
 @ConfigSerializable
-public final class SettingsConfigModel implements SealedConfigurationInterface {
-  @Comment("Shows extra-information for almost-all plugin's processes, events-firing and information-handling.")
-  public boolean debugMode = false;
+public final class MainConfigurationModel implements ConfigurationContract {
+  @Comment("The number of threads to assign to the plugin's thread-pool.")
+  public byte threadPoolSize = 2;
+
+  @Comment("The name to set for the plugin's thread-pool.")
+  public String threadPoolName = "pool-2-thread";
 
   @Comment("""
-    This means that the plugin only will have region-management for players at the specified world, only
-    if this option is enabled.""")
-  public boolean monitorSingleWorldForRegions = true;
-
-  @Comment("The world to monitor for region-events, only if 'monitor-single-world-for-regions' option is enabled.")
-  public String worldToMonitor = "world";
+     Whether enable or not the debug-mode.
+     
+     This option enables a more-verbose logging for the plugin, useful for debugging purposes and troubleshooting.""")
+  public boolean debug = true;
 
   @Comment("""
     The update-rate to set for the async-task.

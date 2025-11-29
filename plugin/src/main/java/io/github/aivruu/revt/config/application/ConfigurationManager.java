@@ -1,6 +1,6 @@
-// This file is part of regions, licensed under the GNU License.
+// This file is part of region-events, licensed under the GNU License.
 //
-// Copyright (c) 2024 aivruu
+// Copyright (c) 2024-2025 Alejandro
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,6 +14,15 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
-package io.github.aivruu.regionevents.config.object;
+package io.github.aivruu.revt.config.application;
 
-public sealed interface SealedConfigurationInterface permits SettingsConfigModel {}
+import io.github.aivruu.revt.config.domain.mapped.MainConfigurationModel;
+import org.jetbrains.annotations.NotNull;
+
+public interface ConfigurationManager {
+  boolean load();
+
+  boolean reload();
+
+  @NotNull MainConfigurationModel config();
+}
