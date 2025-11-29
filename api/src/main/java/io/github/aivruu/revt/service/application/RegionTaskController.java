@@ -1,6 +1,6 @@
-// This file is part of regions, licensed under the GNU License.
+// This file is part of region-events, licensed under the GNU License.
 //
-// Copyright (c) 2024 aivruu
+// Copyright (c) 2024-2025 Alejandro
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,12 +14,10 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
-package io.github.aivruu.regionevents.command;
+package io.github.aivruu.revt.service.application;
 
-import com.mojang.brigadier.tree.LiteralCommandNode;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
+public interface RegionTaskController {
+  void start();
 
-public interface RegistrableCommandInterface {
-  @SuppressWarnings("UnstableApiUsage")
-  LiteralCommandNode<CommandSourceStack> register();
+  void stop();
 }
