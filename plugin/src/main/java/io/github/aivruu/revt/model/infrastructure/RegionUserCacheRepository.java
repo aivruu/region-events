@@ -35,7 +35,7 @@ public final class RegionUserCacheRepository implements RegionUserRepository {
   private final Object2ObjectMap<String, RegionUserAggregateRoot> cache = Object2ObjectMaps.synchronize(new Object2ObjectOpenHashMap<>());
 
   @Override
-  public @Nullable RegionUserAggregateRoot findByIdSync(final @NotNull String id) {
+  public @Nullable RegionUserAggregateRoot findSync(final @NotNull String id) {
     return this.cache.get(id);
   }
 

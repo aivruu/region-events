@@ -25,10 +25,10 @@ import java.util.function.Predicate;
 
 public interface AggregateRootRepository<A extends AggregateRoot> {
   default boolean existsSync(final @NotNull String id) {
-    return this.findByIdSync(id) != null;
+    return this.findSync(id) != null;
   }
 
-  @Nullable A findByIdSync(final @NotNull String id);
+  @Nullable A findSync(final @NotNull String id);
 
   default <C extends Collection<A>> @NotNull C findAllSync() {
     return this.findAllSync(null);
