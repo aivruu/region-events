@@ -32,7 +32,7 @@ import java.util.concurrent.ScheduledFuture;
 public final class SimpleRegionTaskController implements RegionTaskController {
   private final RegionMovementService regionMovementService;
   private final ConfigurationManager configurationManager;
-  private @Nullable ScheduledFuture<?> taskFuture;
+  private @Nullable ScheduledFuture<?> task;
 
   public SimpleRegionTaskController(final @NotNull RegionMovementService regionMovementService, final @NotNull ConfigurationManager configurationManager) {
     this.regionMovementService = regionMovementService;
@@ -41,9 +41,9 @@ public final class SimpleRegionTaskController implements RegionTaskController {
 
   @Override
   public void start() {
-    this.taskFuture = PluginExecutor.runAtFixedRate(() -> {
-      for (final World world : Bukkit.getWorlds()) { // 3
-        for (final Player player : world.getPlayers()) { // 50
+    this.task = PluginExecutor.runAtFixedRate(() -> {
+      for (final World world : Bukkit.getWorlds()) {
+        for (final Player player : world.getPlayers()) {
           this.regionMovementService.tick(player, MovementType.MOVE);
         }
       }
@@ -52,8 +52,8 @@ public final class SimpleRegionTaskController implements RegionTaskController {
 
   @Override
   public void stop() {
-    if ((this.taskFuture == null) || !this.taskFuture.isCancelled()) return;
+    if ((this.task == null) || !this.task.isCancelled()) return;
 
-    this.taskFuture.cancel(false);
+    this.task.cancel(false);
   }
 }
