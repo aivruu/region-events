@@ -16,11 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 package io.github.aivruu.revt.model.domain.event;
 
+/**
+ * Represents the different kinds of movements that are tracked for region-related events.
+ *
+ * @since 2.0.0
+ */
 public enum MovementType {
+  /** Normal movement like walking or running. */
   MOVE,
   TELEPORT,
   SPAWN,
   RESPAWN,
   DISCONNECT,
+  /** Non-recognized movement, normally used as default movement-type for regions' events. */
   UNKNOWN
 }

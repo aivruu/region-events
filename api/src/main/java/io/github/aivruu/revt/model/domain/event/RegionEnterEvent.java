@@ -20,6 +20,11 @@ import io.github.aivruu.revt.model.domain.RegionUserAggregateRoot;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Called when a user is entering a region.
+ *
+ * @since 2.0.0
+ */
 public final class RegionEnterEvent extends RegionEvent {
   private static final HandlerList HANDLER_LIST = new HandlerList();
 

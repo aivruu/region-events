@@ -24,6 +24,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+/**
+ * Represents an entity to manage regions-data for a specific user.
+ *
+ * @since 2.0.0
+ */
 final class RegionUserEntity {
   final String id;
   final ObjectSet<String> markedRegions;
@@ -33,11 +38,27 @@ final class RegionUserEntity {
     this.markedRegions = ObjectSets.synchronize(markedRegions);
   }
 
+  /**
+   * Checks whether this user is inside the specified region.
+   *
+   * @param targetRegion the region-name for checking.
+   * @return {@code true} if the user is in the region.
+   * @see ObjectSet#contains(Object)
+   * @since 2.0.0
+   */
   boolean isInRegion(final @NotNull String targetRegion) {
     return this.markedRegions.contains(targetRegion);
   }
 
-  @SuppressWarnings("ConstantConditions")
+  /**
+   * Returns Bukkit's player reference using this user's id.
+   *
+   * @return this user's {@link Player} instance.
+   * @see Bukkit#getPlayer(UUID)
+   * @see UUID#fromString(String)
+   * @since 2.0.0
+   */
+  @SuppressWarnings("ConstantConditions") // The result shouldn't null when this function is invoked.
   @NotNull Player asPlayer() {
     return Bukkit.getPlayer(UUID.fromString(this.id));
   }

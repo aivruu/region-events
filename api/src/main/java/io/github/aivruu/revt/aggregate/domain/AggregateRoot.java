@@ -18,6 +18,11 @@ package io.github.aivruu.revt.aggregate.domain;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Represents an aggregate-root.
+ *
+ * @since 2.0.0
+ */
 public abstract class AggregateRoot {
   private final String id;
 
@@ -25,6 +30,12 @@ public abstract class AggregateRoot {
     this.id = id;
   }
 
+  /**
+   * Returns this aggregate's id.
+   *
+   * @return the id.
+   * @since 2.0.0
+   */
   public final @NotNull String id() {
     return this.id;
   }

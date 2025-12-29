@@ -20,14 +20,18 @@ import io.github.aivruu.revt.model.domain.RegionUserAggregateRoot;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * An event that encapsulates the data related (such as player and region involved) to a region event.
+ *
+ * @since 2.0.0
+ */
 public abstract class RegionEvent extends Event {
   protected final RegionUserAggregateRoot regionUser;
   protected final String regionName;
-  protected MovementType movement = MovementType.UNKNOWN; // default
+  protected final MovementType movement;
 
   protected RegionEvent(final @NotNull RegionUserAggregateRoot regionUser, final @NotNull String regionName) {
-    this.regionUser = regionUser;
-    this.regionName = regionName;
+    this(regionUser, regionName, /* default */ MovementType.UNKNOWN);
   }
 
   protected RegionEvent(final @NotNull RegionUserAggregateRoot regionUser, final @NotNull String regionName, final @NotNull MovementType movement) {
@@ -36,14 +40,32 @@ public abstract class RegionEvent extends Event {
     this.movement = movement;
   }
 
+  /**
+   * Returns the {@link RegionUserAggregateRoot} involved in this event.
+   *
+   * @return the event's {@link RegionUserAggregateRoot}
+   * @since 2.0.0
+   */
   public final @NotNull RegionUserAggregateRoot region() {
     return this.regionUser;
   }
 
+  /**
+   * Returns the name of the region involved in this event.
+   *
+   * @return the region's name.
+   * @since 2.0.0
+   */
   public final @NotNull String regionName() {
     return this.regionName;
   }
 
+  /**
+   * Returns the movement-type associated with this event.
+   *
+   * @return this event's {@link MovementType}.
+   * @since 2.0.0
+   */
   public final @NotNull MovementType movement() {
     return this.movement;
   }

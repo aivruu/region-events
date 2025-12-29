@@ -18,4 +18,9 @@ package io.github.aivruu.revt.model.domain;
 
 import io.github.aivruu.revt.aggregate.domain.AggregateRootRepository;
 
+/**
+ * A repository-abstraction from {@link AggregateRootRepository} for {@link RegionUserAggregateRoot} management.
+ *
+ * @since 2.0.0
+ */
 public interface RegionUserRepository extends AggregateRootRepository<RegionUserAggregateRoot> {}
