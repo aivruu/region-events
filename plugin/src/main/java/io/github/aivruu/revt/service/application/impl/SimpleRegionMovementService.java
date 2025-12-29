@@ -40,10 +40,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 
 public final class SimpleRegionMovementService implements RegionMovementService {
-  public static final byte NO_USER_INFO_STATUS = 0;
-  public static final byte UNKNOWN_REGION_STATUS = 1;
-  public static final byte MARK_OPERATION_FAILED = 2;
-  public static final byte MARK_OPERATION_SUCCESSFUL = 3;
   private final BukkitScheduler scheduler = Bukkit.getScheduler();
   private final PluginManager pluginManager = Bukkit.getPluginManager();
   private final RegionUserRepository regionUserRepository;
@@ -61,12 +57,12 @@ public final class SimpleRegionMovementService implements RegionMovementService 
 
   @Override
   public @Nullable RegionUserAggregateRoot findUserRegion(final @NotNull Player user) {
-    return this.regionUserRepository.findByIdSync(user.getUniqueId().toString());
+    return this.regionUserRepository.findSync(user.getUniqueId().toString());
   }
 
   @Override
   public void tick(final @NotNull Player user, final @NotNull MovementType movement) {
-    final RegionUserAggregateRoot regionUser = this.regionUserRepository.findByIdSync(user.getUniqueId().toString());
+    final RegionUserAggregateRoot regionUser = this.regionUserRepository.findSync(user.getUniqueId().toString());
     if (regionUser == null) {
       return;
     }
@@ -96,8 +92,8 @@ public final class SimpleRegionMovementService implements RegionMovementService 
 
   @Override
   public byte mark(final @NotNull Player user, final @NotNull String region, final @NotNull Location at, final @NotNull MovementType movement) {
-    final RegionUserAggregateRoot regionUser = this.regionUserRepository.findByIdSync(user.getUniqueId().toString());
-    return (regionUser == null) ? NO_USER_INFO_STATUS : this.applyMark(regionUser, region, at, movement);
+    final RegionUserAggregateRoot regionUser = this.regionUserRepository.findSync(user.getUniqueId().toString());
+    return (regionUser == null) ? RegionMovementService.NO_USER_INFO_STATUS : this.applyMark(regionUser, region, at, movement);
   }
 
   private byte applyMark(
@@ -105,38 +101,38 @@ public final class SimpleRegionMovementService implements RegionMovementService 
      final @NotNull String region,
      final @NotNull Location at,
      final @NotNull MovementType movement) {
-    if (this.regionFetchService.existsRegionWithIdAt(region, at.getWorld())) return UNKNOWN_REGION_STATUS;
+    if (this.regionFetchService.existsRegionWithIdAt(region, at.getWorld())) return RegionMovementService.UNKNOWN_REGION_STATUS;
 
     this.scheduler.runTask(this.plugin, () -> this.pluginManager.callEvent(new RegionEnterEvent(regionUser, region, movement)));
     if (!regionUser.mark(region)) {
       return this.unapplyMark(regionUser, region, movement);
     }
-    this.scheduler.runTask(this.plugin, () -> this.pluginManager.callEvent(new RegionEnteredEvent(regionUser, region, movement)));
+    this.scheduler.runTaskLater(this.plugin, () -> this.pluginManager.callEvent(new RegionEnteredEvent(regionUser, region, movement)), 60L);
     return MARK_OPERATION_SUCCESSFUL;
   }
 
   @Override
   public byte unmark(final @NotNull Player user, final @NotNull String region, final @NotNull MovementType movement) {
-    final RegionUserAggregateRoot regionUser = this.regionUserRepository.findByIdSync(user.getUniqueId().toString());
-    return (regionUser == null) ? NO_USER_INFO_STATUS : this.unapplyMark(regionUser, region, movement);
+    final RegionUserAggregateRoot regionUser = this.regionUserRepository.findSync(user.getUniqueId().toString());
+    return (regionUser == null) ? RegionMovementService.NO_USER_INFO_STATUS : this.unapplyMark(regionUser, region, movement);
   }
 
   private byte unapplyMark(final @NotNull RegionUserAggregateRoot regionUser, final @NotNull String region, final @NotNull MovementType movement) {
     this.scheduler.runTask(this.plugin, () -> this.pluginManager.callEvent(new RegionLeaveEvent(regionUser, region, movement)));
     if (!regionUser.unmark(region)) {
-      return MARK_OPERATION_FAILED;
+      return RegionMovementService.UNMARK_OPERATION_FAILED;
     }
-    this.scheduler.runTask(this.plugin, () -> this.pluginManager.callEvent(new RegionLeftEvent(regionUser, region, movement)));
-    return MARK_OPERATION_SUCCESSFUL;
+    this.scheduler.runTaskLater(this.plugin, () -> this.pluginManager.callEvent(new RegionLeftEvent(regionUser, region, movement)), 60L);
+    return RegionMovementService.MARK_OPERATION_SUCCESSFUL;
   }
 
   @Override
-  public byte unmarkAll(final @NotNull Player user, final @NotNull MovementType movement) {
-    final RegionUserAggregateRoot regionUser = this.regionUserRepository.findByIdSync(user.getUniqueId().toString());
-    if (regionUser == null) {
-      return NO_USER_INFO_STATUS;
+  public boolean unmarkAll(final @NotNull Player user, final @NotNull MovementType movement) {
+    final RegionUserAggregateRoot regionUser = this.regionUserRepository.findSync(user.getUniqueId().toString());
+    if ((regionUser == null) || !regionUser.hasMarkedRegions()) {
+      return false;
     }
     regionUser.markedRegions().clear();
-    return MARK_OPERATION_SUCCESSFUL;
+    return true;
   }
 }
