@@ -20,15 +20,11 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.jetbrains.annotations.NotNull;
 
 public final class Debugger {
-  private static final ComponentLogger LOGGER = ComponentLogger.logger("REvt-Debug");
+  private static final ComponentLogger LOGGER = ComponentLogger.logger("REvt-Debugger");
   private static boolean enabled;
 
   private Debugger() {
     throw new UnsupportedOperationException("This class is for utility.");
-  }
-
-  public static boolean isEnabled() {
-    return enabled;
   }
 
   public static void enable(final boolean enable) {
