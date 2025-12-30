@@ -61,7 +61,7 @@ public interface RegionMovementService {
   @Nullable RegionUserAggregateRoot findUserRegion(final @NotNull Player user);
 
   /**
-   * Handles region-movement for user with the given movement-type on current tick.
+   * Handles region-movement for user with the given movement-type on the current tick.
    *
    * @param user the user to handle.
    * @param movement the movement-type the user is performing or performed.
