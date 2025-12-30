@@ -13,6 +13,6 @@ tasks {
 
   register<Exec>("setupTestEnv") {
     dependsOn(shadowJar)
-    commandLine("py", "scripts/setup-jar.py")
+    commandLine("bash", findProperty("script-name") as String)
   }
 }
