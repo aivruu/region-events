@@ -19,20 +19,12 @@ ensureExistingDirOrFile () {
 SERVER_PLUGINS_DIR="your-server-plugins-folder"
 ensureExistingDirOrFile "$SERVER_PLUGINS_DIR"
 
-#if [[ ! -d "$SERVER_DIR" || ! -d "$SERVER_PLUGINS_DIR" ]]; then
-#  echo
-#  echo "ERROR: Server or plugins directories does not exist, ensure the specified-route in the
-#        script is correct."
-#  echo
-#  exit 1
-#fi
-
 # project-related variables.
 PROJECT_NAME="project-name"
 PROJECT_DIR="project-route"
 PROJECT_VERSION=$(extractProperty "version" "$PROJECT_DIR/gradle.properties")
-PROJECT_BUILT_FILE="built-project-file"
-PROJECT_BUILT_FILE_ROUTE="route-to-compiled-jar-file"
+PROJECT_BUILT_FILE="$PROJECT_NAME-$PROJECT_VERSION.jar"
+PROJECT_BUILT_FILE_ROUTE="builds-dir/$PROJECT_BUILT_FILE"
 
 # plugin-file related variables.
 PLUGIN_DATA_FOLDER_DIR="plugin-data-folder-route"
