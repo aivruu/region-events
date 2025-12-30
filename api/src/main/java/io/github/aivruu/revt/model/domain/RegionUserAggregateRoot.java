@@ -19,6 +19,7 @@ package io.github.aivruu.revt.model.domain;
 import io.github.aivruu.revt.aggregate.domain.AggregateRoot;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
+import it.unimi.dsi.fastutil.objects.ObjectSets;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -65,13 +66,13 @@ public final class RegionUserAggregateRoot extends AggregateRoot {
   }
 
   /**
-   * Returns the set of marked-regions for the user.
+   * Returns an unmodifiable-copy for the set of marked-regions of the user.
    *
-   * @return the user's marked-regions.
+   * @return the user's marked-regions collection.
    * @since 2.0.0
    */
   public @NotNull ObjectSet<String> markedRegions() {
-    return this.entity.markedRegions;
+    return ObjectSets.unmodifiable(this.entity.markedRegions);
   }
 
   /**
