@@ -8,4 +8,5 @@ build
 # Ignore IDE project settings directory.
 .idea
 
+*.sh
 jars/
