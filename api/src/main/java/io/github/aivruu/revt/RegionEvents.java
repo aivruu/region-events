@@ -21,10 +21,45 @@ import io.github.aivruu.revt.service.application.RegionFetchService;
 import io.github.aivruu.revt.service.application.RegionMovementService;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Represents the main access-point for the plugin's API.
+ *
+ * @since 2.0.0
+ */
 public interface RegionEvents {
+  /**
+   * Returns the type of tracking the plugin is using for region-movement related events.
+   *
+   * @throws IllegalStateException if the property has not been initialized yet.
+   * @return the current {@link RegionTrackingType}.
+   * @since 2.0.0
+   */
+  @NotNull RegionTrackingType trackingType();
+
+  /**
+   * Returns the repository used for the users' region-data persistence.
+   *
+   * @throws IllegalStateException if the repository has not been initialized yet.
+   * @return the {@link RegionUserRepository} instance.
+   * @since 2.0.0
+   */
   @NotNull RegionUserRepository regionUserRepository();
 
+  /**
+   * Returns the service used for fetch WorldGuard regions for plugin's handling.
+   *
+   * @throws IllegalStateException if the service has not been initialized yet.
+   * @return the {@link RegionFetchService} instance.
+   * @since 2.0.0
+   */
   @NotNull RegionFetchService regionFetchService();
 
+  /**
+   * Returns the service used to handle region-movements related operations.
+   *
+   * @throws IllegalStateException if the service has not been initialized yet.
+   * @return the {@link RegionMovementService} instance.
+   * @since 2.0.0
+   */
   @NotNull RegionMovementService regionMovementService();
 }
