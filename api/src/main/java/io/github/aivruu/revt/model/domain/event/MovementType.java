@@ -27,6 +27,7 @@ public enum MovementType {
   TELEPORT,
   SPAWN,
   RESPAWN,
+  /** By-user connection terminated or due to a kick. */
   DISCONNECT,
   /** Non-recognized movement, normally used as default movement-type for regions' events. */
   UNKNOWN
