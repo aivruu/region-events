@@ -32,9 +32,8 @@ public final class RegionEventsProvider {
 
   /**
    * Returns the current {@link RegionEvents} instance.
-   * <p>
-   * Will throw an {@link IllegalStateException} if the instance-field isn't initialized.
    *
+   * @throws IllegalStateException if the API isn't initialized yet.
    * @return The {@link RegionEvents} instance.
    * @since 1.0.0
    */
@@ -47,9 +46,8 @@ public final class RegionEventsProvider {
 
   /**
    * Sets the given {@link RegionEvents} instance to the instance-field.
-   * <p>
-   * Will throw an {@link IllegalStateException} if the instance-field is already initialized.
    *
+   * @throws IllegalStateException if the API is already initialized.
    * @param impl a {@link RegionEvents} instance.
    * @since 1.0.0
    */
