@@ -24,10 +24,10 @@ import io.github.aivruu.revt.model.domain.RegionUserRepository;
 import io.github.aivruu.revt.model.infrastructure.RegionUserCacheRepository;
 import io.github.aivruu.revt.service.application.RegionFetchService;
 import io.github.aivruu.revt.service.application.RegionMovementService;
-import io.github.aivruu.revt.service.application.RegionTaskController;
 import io.github.aivruu.revt.service.application.impl.SimpleRegionFetchService;
 import io.github.aivruu.revt.service.application.impl.SimpleRegionMovementService;
-import io.github.aivruu.revt.service.application.impl.SimpleRegionTaskController;
+import io.github.aivruu.revt.task.application.MovementTrackingTask;
+import io.github.aivruu.revt.task.domain.RegionTask;
 import io.github.aivruu.revt.util.application.PluginExecutor;
 import io.github.aivruu.revt.util.application.Debugger;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -37,10 +37,18 @@ import org.jetbrains.annotations.NotNull;
 public class REvtPlugin extends JavaPlugin implements RegionEvents {
   private final ComponentLogger logger = super.getComponentLogger();
   private final ConfigurationManager configurationManager = new SimpleConfigurationManager(this.logger, super.getDataPath());
+  private RegionTrackingType trackingType;
   private RegionUserRepository regionUserRepository;
   private RegionFetchService regionFetchService;
   private RegionMovementService regionMovementService;
-  private RegionTaskController regionTaskController;
+  private RegionTask movementTrackingTask;
+
+  @Override
+  public @NotNull RegionTrackingType trackingType() {
+    if (this.trackingType == null) throw PluginExecutor.NON_INITIALIZED_CACHED_EXCEPTION;
+
+    return this.trackingType;
+  }
 
   @Override
   public @NotNull RegionUserRepository regionUserRepository() {
@@ -75,20 +83,40 @@ public class REvtPlugin extends JavaPlugin implements RegionEvents {
     this.regionFetchService = new SimpleRegionFetchService();
     this.regionMovementService = new SimpleRegionMovementService(this.regionUserRepository, this.regionFetchService, this);
 
-    this.regionTaskController = new SimpleRegionTaskController(this.regionMovementService, this.configurationManager);
+    this.movementTrackingTask = new MovementTrackingTask(this.regionMovementService, this.configurationManager);
+    if (!this.movementTrackingTask.prepare()) {
+      throw new IllegalStateException("Failed to setup parameters for movement-tracking task, seems that specified world-to-track doesn't exist.");
+    }
+    this.trackingType = config.tracking;
   }
 
   @Override
   public void onEnable() {
     super.getServer().getPluginManager().registerEvents(new PlayerEventHandler(this.regionUserRepository, this.regionMovementService), this);
 
-    this.regionTaskController.start();
+    this.movementTrackingTask.start();
     RegionEventsProvider.set(this);
+  }
+
+  public boolean reload() {
+    if (!this.configurationManager.reload()) return false;
+
+    final MainConfigurationModel config = this.configurationManager.config();
+    this.trackingType = config.tracking;
+    Debugger.enable(config.debug);
+
+    this.movementTrackingTask.stop();
+    if (!this.movementTrackingTask.prepare()) {
+      Debugger.write("Failed to setup parameters for movement-tracking task, seems that specified world-to-track doesn't exist.");
+      return false;
+    }
+    this.movementTrackingTask.start();
+    return true;
   }
 
   @Override
   public void onDisable() {
-    this.regionTaskController.stop();
+    this.movementTrackingTask.stop();
     this.regionUserRepository.clearSync();
   }
 }
