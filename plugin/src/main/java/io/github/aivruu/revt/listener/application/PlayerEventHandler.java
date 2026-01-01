@@ -22,7 +22,6 @@ import io.github.aivruu.revt.model.domain.event.MovementType;
 import io.github.aivruu.revt.model.domain.event.RegionLeaveEvent;
 import io.github.aivruu.revt.model.domain.event.RegionLeftEvent;
 import io.github.aivruu.revt.service.application.RegionMovementService;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -61,12 +60,11 @@ public final class PlayerEventHandler implements Listener {
     if (regionUser == null) {
       return;
     }
-    final ObjectSet<String> markedRegions = regionUser.markedRegions();
-    for (final String region : markedRegions) {
-      this.pluginManager.callEvent(new RegionLeaveEvent(regionUser, region, MovementType.DISCONNECT));
-      this.pluginManager.callEvent(new RegionLeftEvent(regionUser, region, MovementType.DISCONNECT));
-    }
-    markedRegions.clear();
+    regionUser.markedRegions().forEach(regionName -> {
+      this.pluginManager.callEvent(new RegionLeaveEvent(regionUser, regionName, MovementType.DISCONNECT));
+      this.pluginManager.callEvent(new RegionLeftEvent(regionUser, regionName, MovementType.DISCONNECT));
+    });
+    regionUser.unmarkAll();
   }
 
   @EventHandler
