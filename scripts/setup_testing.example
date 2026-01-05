@@ -5,7 +5,6 @@
 # The returned property is cut taking '=' as delimiter, then the result is extracted and returned.
 # e.g. version=2.0.0 -> 2.0.0
 extractProperty () {
-  # $1 corresponds to the property to search for, $2 refers to the file from where to extract it.
   grep "$1" "$2" | cut -d'=' -f2
 }
 
