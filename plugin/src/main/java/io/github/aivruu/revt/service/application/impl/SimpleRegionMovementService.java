@@ -66,7 +66,7 @@ public final class SimpleRegionMovementService implements RegionMovementService 
     if (regionUser == null) {
       return;
     }
-    final ObjectSet<String> markedRegions = regionUser.markedRegions();
+    ObjectSet<String> markedRegions = regionUser.markedRegions();
     if (markedRegions.isEmpty()) {
       return;
     }
@@ -82,6 +82,7 @@ public final class SimpleRegionMovementService implements RegionMovementService 
         this.unapplyMark(regionUser, regionId, movement);
       }
     }
+    markedRegions = null;
     for (final String regionId : currentRegionIds) {
       if (!regionUser.isInRegion(regionId)) {
         this.applyMark(regionUser, regionId, at, movement);

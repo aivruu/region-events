@@ -13,6 +13,7 @@ tasks {
 
   register<Exec>("setupTestEnv") {
     dependsOn(shadowJar)
-    commandLine("bash", findProperty("script-name") as String)
+    val script = findProperty("script") as String
+    commandLine("bash", script)
   }
 }
